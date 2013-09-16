@@ -2,6 +2,8 @@
 
 Notice nothing in this libary is written to be effitiant its intended for small records with properties.
 
+Depends on [dash.el](https://github.com/magnars/dash.el)
+
 * `m/alist->plist`
   converts a alist of style ((a . b) (c . d)) to (:a b :c d)
 * `m/get`
