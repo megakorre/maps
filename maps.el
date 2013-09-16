@@ -28,8 +28,8 @@
 ;;; Code:
 
 (defun m/alist->plist (alist)
-  (-flatten (--map
-	     (list (m/symbol->keyword (car it)) (cdr it))
+  (-flatten (-map
+	     (lambda (it) (list (m/symbol->keyword (car it)) (cdr it)))
 	     alist)))
 
 (defalias 'm/get 'plist-get)
@@ -54,17 +54,18 @@
   (-reduce-from
    (lambda (plist-a plist-b)
      (->> (-partition 2 plist-b)
-       (--reduce-from
-	(let ((key (first it))
-	      (val (second it)))
-	  (plist-put acc key val))
+       (-reduce-from
+	(lambda (acc it)
+	  (let ((key (first it))
+		(val (second it)))
+	    (plist-put acc key val)))
 	plist-a)))
    plist-a
    plist-b))
 
 (defun m/dissoc (plist key)
   (-flatten
-   (--reject (eq (first it) key) (-partition 2 plist))))
+   (-reject (lambda (it) (eq (first it) key)) (-partition 2 plist))))
 
 (defun m/assoc (plist &rest pairs)
   (m/merge plist pairs))
